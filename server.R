@@ -6,18 +6,35 @@
 #
 
 library(shiny)
+library(WDI)
+library(plotly)
+library(tidyverse)
 
-shinyServer(function(input, output) {
+return_countries <- function(data) {
+  data_transformed <- as_tibble(data)
+  countries <- data_transformed$iso2c
+  names(countries) <- data_transformed$country
+  countries
+}
 
-  output$distPlot <- renderPlot({
+return_indicators <- function(data) {
+  data_transformed <- as_tibble(data)
+  indicators <- data_transformed$indicator
+  names(indicators) <- data_transformed$name
+  indicators
+}
 
-    # generate bins based on input$bins from ui.R
-    x    <- faithful[, 2]
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
 
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
 
+shinyServer(function(input, output, session) {
+  
+  output$country_selector <- renderUI({
+    selectInput("country", "Choose Country: ", choices = return_countries(WDI_data$country), multiple = TRUE)
   })
 
+  output$indicator_selector <- renderUI({
+    selectInput("indicator", "Choose Indicator: ", choices = return_indicators(WDI_data$series))
+  })
+  
+  output$documentation <- renderText(paste("Country: ", input$country, "Indicator: ", input$indicator))
 })

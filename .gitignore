@@ -3,3 +3,6 @@ packrat/lib*/
 .Rhistory
 .httr-oauth
 WDTrends.md
+packrat/bundles/
+WDTrends.html
+wdicoursera*.tar.gz

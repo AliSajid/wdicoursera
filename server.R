@@ -1,4 +1,5 @@
 
+
 # This is the server logic for a Shiny web application.
 # You can find out more about building applications with Shiny here:
 #
@@ -9,32 +10,60 @@ library(shiny)
 library(WDI)
 library(plotly)
 library(tidyverse)
-
-return_countries <- function(data) {
-  data_transformed <- as_tibble(data)
-  countries <- data_transformed$iso2c
-  names(countries) <- data_transformed$country
-  countries
-}
-
-return_indicators <- function(data) {
-  data_transformed <- as_tibble(data)
-  indicators <- data_transformed$indicator
-  names(indicators) <- data_transformed$name
-  indicators
-}
-
+library(wdidata)
 
 
 shinyServer(function(input, output, session) {
-  
-  output$country_selector <- renderUI({
-    selectInput("country", "Choose Country: ", choices = return_countries(WDI_data$country), multiple = TRUE)
+  generate_plot <- eventReactive(input$generate_graph, {
+    validate(
+      need(abs(input$to_year - input$from_year) > input$interval, "Interval should be smaller than the range of years")
+    )
+    valid_years <- seq(as.numeric(input$from_year), as.numeric(input$to_year), by = as.numeric(input$interval))
+    download <-
+      WDI(
+        country = if_else(condition = input$country != "", input$country, "all"),
+        indicator = input$indicator,
+        start = input$from_year,
+        end = input$to_year
+      )
+    validate(
+      need(!is.null(download), "The requested data can not be loaded. Please try a different set of inputs.")
+      )
+    
+    download <- download %>% 
+      filter(year %in% valid_years)
+    
+    indicator_id <- names(download)[3]
+    indicator_full_name <-
+      names(indicators)[which(indicators == indicator_id)]
+    names(download)[3] <- "indicator"
+    download %>%
+      plot_ly(
+        x = ~ year,
+        y = ~ indicator,
+        color = ~ country,
+        type = "scatter",
+        mode = "lines"
+      ) %>%
+      layout(
+        xaxis = list(
+          autotick = FALSE,
+          dtick = input$interval,
+          title = "Years"
+        ),
+        yaxis = list(title = indicator_full_name),
+        margin = list(
+          l = 50,
+          r = 50,
+          b = 100,
+          t = 100,
+          pad = 4
+        ),
+        autosize = TRUE
+      )
   })
+  
+    output$wdi_plot <- renderPlotly(generate_plot())
 
-  output$indicator_selector <- renderUI({
-    selectInput("indicator", "Choose Indicator: ", choices = return_indicators(WDI_data$series))
+
   })
-  
-  output$documentation <- renderText(paste("Country: ", input$country, "Indicator: ", input$indicator))
-})

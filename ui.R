@@ -52,6 +52,7 @@ shinyUI(fluidPage(
                        tags$li("The graph is interactive. You can use the plotly tools to explore the data further.")
                      )
                      ),
+                 p("You can check out the source code for this project at", a("github", href = "https://github.com/AliSajid/wdicoursera")),
         id = "outputtabset"
       )
     )

@@ -11,9 +11,13 @@ The World Development Trendifier is an application that lets you select and view
 The beta version has the following features:
 
 1. Capability to select up to five countries (region, continent or economic groups) for comparison of a single indicator.
-2. Capability to select up to five indicators at a time for the selected countries (region, continent or economic groups).
-3. Capability to select data points in modifiable intervals of 1, 2, 5, or 10 years.
-4. Capability to download the displayed data and graphic.
+2. Capability to select data points in modifiable intervals of 1, 2, 5, or 10 years.
+
+Future Directions:
+
+1. Capability to include more than one indicator.
+2. Capability to download data and the graph.
+
 
 
 Rationale

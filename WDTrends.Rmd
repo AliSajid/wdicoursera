@@ -1,11 +1,22 @@
-World Development Trendifier
-========================================================
+---
+title: World Development Trendifier
 author: Ali Sajid Imami
 date: 01-Apr-2018
 autosize: true
+output:
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+---
 
-Introduction
-========================================================
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(WDI)
+library(plotly)
+```
+
+##Introduction
+
 The World Development Trendifier is an application that lets you select and view trend data from selected indicators and selected countries. This application is a simpler front-end to World Bank's World Development Indicator Database. It uses the WDI API to pull the required data and then displays it in an interactive visualization.
 
 The beta version has the following features:
@@ -20,8 +31,8 @@ Future Directions:
 
 
 
-Rationale
-========================================================
+##Rationale
+
 
 World Development Indicators are a set of indicators published yearly by the World Bank. It consists of more than 1500 indicators that are reported annually. This data is collected from vetted and official sources and ostensibly indicates the true state of the country, region, continent or economic group in question.
 
@@ -29,24 +40,23 @@ World Bank provides a highly specialized tool called the [Databank](http://datab
 
 The application in question simplifies the entire set up considerably. It lets you select the indicators, years, countries and the interval and then displays the data in an interactive visualization.
 
-Sample Code
-========================================================
+##Sample Code
+
 Following is a basic response graph that will be the output from the application. It gives the trends of _GDP per capita (current US$)_ from 2001 to 2005, with comparisons between _High Income_, _Middle Income_ and _Low Income_ countries.
 
 ```{r output}
-library(WDI)
-library(plotly)
-library(readr)
+require(WDI)
+require(plotly)
 
 ind <- "NY.GDP.PCAP.CD"
 
 dat <- WDI(country = c("XD", "XP", "XM"), indicator = ind, start = 2001, end = 2005)
-p = plot_ly(dat, x = ~year, y = ~NY.GDP.PCAP.CD, color = ~country, type = "scatter", mode = "lines") %>% 
+p <-  plot_ly(dat, x = ~year, y = ~NY.GDP.PCAP.CD, color = ~country, type = "scatter", mode = "lines") %>% 
   layout(xaxis = list(title = "Year"), yaxis = list(title = "GDP per capita (current US$)"))
 ```
 
-Sample Response
-========================================================
+##Sample Response
+
 
 ```{r response, echo=FALSE, fig.height=5, fig.width=7, message=FALSE, warning=FALSE, fig.align="center"}
 p

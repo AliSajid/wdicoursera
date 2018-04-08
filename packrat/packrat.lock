@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.4.8.1
-RVersion: 3.4.4
+RVersion: 3.4.3
 Repos: BioCsoft=https://bioconductor.org/packages/3.6/bioc,
     BioCann=https://bioconductor.org/packages/3.6/data/annotation,
     BioCexp=https://bioconductor.org/packages/3.6/data/experiment,
@@ -511,6 +511,12 @@ Package: viridisLite
 Source: CRAN
 Version: 0.3.0
 Hash: 78bb072c4f9e729a283d4c40ec93f9c6
+
+Package: wdidata
+Source: source
+Version: 0.1.0
+Hash: 3fa5edd7552886612d68e0fa5cdfd05b
+SourcePath: ../wdidata
 
 Package: webshot
 Source: CRAN
